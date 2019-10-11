@@ -18,6 +18,7 @@ function hideHeader() {
     var header = document.getElementsByTagName("header").item(0);
     header.style.display = "none";
 
+
     _sizeArticle();
 }
 
@@ -184,7 +185,16 @@ function _sizeArticle() {
     }
 
     var article = document.getElementsByTagName("article").item(0);
-    article.style.maxHeight = newArticleMaxHeight + "vh";
+
+    var availableDelta = 0;
+    if (_footerVisible && _footerExpanded && !_headerVisible) {
+        availableDelta = defaultHeaderHeightVh / 2;
+
+        var outer = document.getElementById("outerFooter");
+        outer.style.height = expandedFooterHeightVh + availableDelta + "vh";
+    }
+
+    article.style.maxHeight = newArticleMaxHeight - availableDelta + "vh";
 }
 
 function docReady(fn) {
@@ -203,10 +213,15 @@ document.onkeydown = function (ev) {
     if (ev.key === "ArrowUp") {
         if (!_footerVisible) {
             showFooter();
-        } else {
+        } else if (_footerExpanded || (_footerVisible && _sidebarVisible)) {
+            hideHeader();
+        } else if (_footerVisible) {
             expandFooter();
         }
     } else if (ev.key === "ArrowDown") {
+        if (!_headerVisible) {
+            showHeader();
+        }
         if (_footerExpanded) {
             collapseFooter();
         } else if (_footerVisible) {
