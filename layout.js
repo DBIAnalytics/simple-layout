@@ -125,7 +125,7 @@ function showSidebar() {
         sidebar.style.flex = "0 0 " + mobileSidebarWidthWh + "vw";
 
         var article = document.getElementsByTagName("article").item(0);
-        article.style.marginLeft = "-" + desktopSidebarWidthWh + "vw";
+        article.style.marginLeft = "-" + mobileSidebarWidthWh + "vw";
     } else {
         sidebar.style.flex = "0 0 " + desktopSidebarWidthWh + "vw";
     }
@@ -143,7 +143,6 @@ function _useInnerFooter() {
         var inner = document.getElementById("innerFooter");
         inner.style.display = "block";
         inner.style.marginLeft = "-1em";
-        inner.style.marginTop = "1em";
         inner.style.width = "calc(100% + 2em)";
 
         var footerHeader = inner.getElementsByClassName("footerHeader").item(0);
