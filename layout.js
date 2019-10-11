@@ -144,6 +144,7 @@ function _useInnerFooter() {
         inner.style.display = "block";
         inner.style.marginLeft = "-1em";
         inner.style.marginTop = "1em";
+        inner.style.width = "calc(100% + 2em)";
 
         var footerHeader = inner.getElementsByClassName("footerHeader").item(0);
         footerHeader.style.display = "block";
