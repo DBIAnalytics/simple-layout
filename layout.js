@@ -1,6 +1,6 @@
-var defaultHeaderHeightVh = 15;
+var defaultHeaderHeightVh = 10;
 
-var defaultFooterHeightVh = 5;
+var defaultFooterHeightVh = 10;
 var expandedFooterHeightVh = 50;
 
 var desktopSidebarWidthWh = 30;
@@ -26,6 +26,7 @@ function showHeader() {
 
     var header = document.getElementsByTagName("header").item(0);
     header.style.display = "flex";
+    header.style.height = defaultHeaderHeightVh + "vh";
 
     _sizeArticle();
 }
@@ -116,7 +117,6 @@ function showSidebar() {
     }
 
     _sidebarVisible = true;
-    _useInnerFooter();
 
     var sidebar = document.getElementsByTagName("aside").item(0);
     sidebar.style.display = "block";
@@ -129,6 +129,7 @@ function showSidebar() {
     } else {
         sidebar.style.flex = "0 0 " + desktopSidebarWidthWh + "vw";
     }
+    _useInnerFooter();
 }
 
 function _isMobile() {
@@ -143,6 +144,10 @@ function _useInnerFooter() {
         inner.style.display = "block";
         inner.style.marginLeft = "-1em";
         inner.style.marginTop = "1em";
+
+        var footerHeader = inner.getElementsByClassName("footerHeader").item(0);
+        footerHeader.style.display = "block";
+        footerHeader.style.height = defaultFooterHeightVh + "vh";
     }
 
     var outer = document.getElementById("outerFooter");
@@ -163,6 +168,7 @@ function _useOuterFooter() {
 
         var footerHeader = outer.getElementsByClassName("footerHeader").item(0);
         footerHeader.style.display = "block";
+        footerHeader.style.height = defaultFooterHeightVh + "vh";
     }
 
     _sizeArticle();
@@ -173,11 +179,8 @@ function _sizeArticle() {
     if (_headerVisible) {
         newArticleMaxHeight -= defaultHeaderHeightVh;
     }
-    if (_footerVisible) {
+    if (_footerVisible && !_usingInnerFooter) {
         newArticleMaxHeight -= (_footerExpanded ? expandedFooterHeightVh : defaultFooterHeightVh);
-    }
-    if (_usingInnerFooter) {
-        newArticleMaxHeight += 5;
     }
 
     var article = document.getElementsByTagName("article").item(0);
