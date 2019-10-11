@@ -4,7 +4,7 @@ var defaultFooterHeightVh = 5;
 var expandedFooterHeightVh = 50;
 
 var desktopSidebarWidthWh = 30;
-var mobileSidebarWidthWh = 30;
+var mobileSidebarWidthWh = 50;
 
 var _headerVisible = true;
 var _footerVisible = true;
@@ -16,7 +16,7 @@ function hideHeader() {
     _headerVisible = false;
 
     var header = document.getElementsByTagName("header").item(0);
-    header.style.display="none";
+    header.style.display = "none";
 
     _sizeArticle();
 }
@@ -98,11 +98,14 @@ function expandFooter() {
     _sizeArticle();
 }
 
-function hideSidebar () {
+function hideSidebar() {
     _sidebarVisible = false;
 
     var sidebar = document.getElementsByTagName("aside").item(0);
     sidebar.style.display = "none";
+
+    var article = document.getElementsByTagName("article").item(0);
+    article.style.marginLeft = "0";
 
     _useOuterFooter();
 }
@@ -117,7 +120,15 @@ function showSidebar() {
 
     var sidebar = document.getElementsByTagName("aside").item(0);
     sidebar.style.display = "block";
-    sidebar.style.flex = _isMobile() ? "0 0 50vw" : "0 0 30vw";
+
+    if (_isMobile()) {
+        sidebar.style.flex = "0 0 " + mobileSidebarWidthWh + "vw";
+
+        var article = document.getElementsByTagName("article").item(0);
+        article.style.marginLeft = "-" + desktopSidebarWidthWh + "vw";
+    } else {
+        sidebar.style.flex = "0 0 " + desktopSidebarWidthWh + "vw";
+    }
 }
 
 function _isMobile() {
@@ -182,7 +193,30 @@ function docReady(fn) {
         document.addEventListener("DOMContentLoaded", fn);
     }
 }
-docReady(function() {
+
+document.onkeydown = function (ev) {
+    console.log(ev);
+
+    if (ev.key === "ArrowUp") {
+        if (!_footerVisible) {
+            showFooter();
+        } else {
+            expandFooter();
+        }
+    } else if (ev.key === "ArrowDown") {
+        if (_footerExpanded) {
+            collapseFooter();
+        } else if (_footerVisible) {
+            hideFooter();
+        }
+    } else if (ev.key === "ArrowLeft") {
+        showSidebar();
+    } else if (ev.key === "ArrowRight") {
+        hideSidebar();
+    }
+};
+
+docReady(function () {
     hideHeader();
     hideFooter();
     showHeader();
@@ -197,5 +231,6 @@ docReady(function() {
     hideFooter();
     collapseFooter();
     showFooter();
+    showSidebar();
 });
 
